@@ -1,0 +1,7 @@
+{
+  "name": "KingsDashboard",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

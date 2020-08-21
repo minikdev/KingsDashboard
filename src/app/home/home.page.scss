@@ -25,3 +25,29 @@
 #container a {
   text-decoration: none;
 }
+.Row {
+  margin-top: +20px;
+  border-color: green;
+  border-width: 0.05em;
+  border-style: solid;
+}
+
+.my-label {
+  font-size: 1.2em;
+  font-weight: bold;
+
+  text-decoration-style: solid;
+}
+ion-button {
+  margin-top: +20px;
+}
+
+.my-toolbar {
+  font-size: 1.2em;
+  font-weight: bold;
+
+  text-decoration-style: solid;
+}
+.my-custom-class .modal-wrapper {
+  background: #222;
+}

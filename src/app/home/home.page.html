@@ -1,20 +1,123 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+<ion-header size="large" class="ion-text-center ion-no-border">
+  <ion-toolbar color="primary" class="my-toolbar">
+    <ion-icon slot="start" src="./assets/icon/crown.svg"></ion-icon>
+
+    King's Dashboard
+
+    <ion-icon slot="end" src="./assets/icon/crown.svg"></ion-icon>
   </ion-toolbar>
 </ion-header>
+<ion-content>
+  <ion-grid>
+    <ion-grid>
+      <ion-row class="Row">
+        <ion-col size="12" offset="0">
+          <ion-label color="primary" class="my-label"> Squad: </ion-label>
+          <ion-label
+            color="primary"
+            class="my-label"
+            *ngFor="let item of squad"
+          >
+            <ion-text>{{item}}, </ion-text>
+          </ion-label>
+        </ion-col>
+      </ion-row>
+      <ion-row class="Row">
+        <ion-col size="12" offset="0">
+          <ion-label color="medium" class="my-label"> King: </ion-label>
+          <ion-label color="medium" class="my-label">
+            <ion-text>{{king}} </ion-text>
+          </ion-label>
+        </ion-col>
+      </ion-row>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+      <ion-row class="Row">
+        <ion-col>
+          <ion-label color="danger" class="my-label"> Vampires: </ion-label>
+          <ion-label
+            color="danger"
+            class="my-label"
+            *ngFor="let item of vampires"
+          >
+            <ion-text>{{item}}, </ion-text>
+          </ion-label>
+        </ion-col>
+      </ion-row>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+      <ion-row class="Row">
+        <ion-col>
+          <ion-label color="warning" class="my-label">
+            Wizards:
+          </ion-label>
+
+          <ion-label
+            color="warning"
+            class="my-label"
+            *ngFor="let item of wizards"
+          >
+            <ion-text>{{item}}, </ion-text>
+          </ion-label>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="Row">
+        <ion-col>
+          <ion-label color="success" class="my-label">
+            Vigilantes:
+          </ion-label>
+
+          <ion-label
+            color="success"
+            class="my-label"
+            *ngFor="let item of vigilantes"
+          >
+            <ion-text>{{item}}, </ion-text>
+          </ion-label>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid>
+      <ion-button expand="block" color="primary" (click)="addToSquad()">
+        <ion-icon slot="start" src="./assets/icon/group.svg"></ion-icon>
+        +Squad
+      </ion-button>
+
+      <ion-button expand="block" color="medium" (click)="drawKing()">
+        <ion-icon slot="start" src="./assets/icon/crown.svg"></ion-icon>
+        +King
+      </ion-button>
+      <ion-button expand="block" color="danger" (click)="drawPlayer(vampires)">
+        <ion-icon slot="start" src="./assets/icon/vampire.svg"></ion-icon>
+        +Vampire
+      </ion-button>
+      <ion-button expand="block" color="warning" (click)="drawPlayer(wizards)">
+        <ion-icon slot="start" src="./assets/icon/wizard.svg"></ion-icon>
+        +Wizard
+      </ion-button>
+      <ion-button
+        expand="block"
+        color="success"
+        (click)="drawPlayer(vigilantes)"
+      >
+        <ion-icon slot="start" src="./assets/icon/musket.svg"></ion-icon>
+        +Vigilante</ion-button
+      >
+
+      <!-- Round -->
+      <ion-row>
+        <ion-col>
+          <ion-button shape="round" (click)="restartGame()">
+            <ion-icon name="refresh-outline"></ion-icon>
+            Restart</ion-button
+          > </ion-col
+        ><ion-col>
+          <ion-button shape="round" (click)="presentModal()">
+            <ion-icon src="./assets/icon/waving-hand.svg"> </ion-icon>
+            Kick From Squad</ion-button
+          >
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-grid>
 </ion-content>

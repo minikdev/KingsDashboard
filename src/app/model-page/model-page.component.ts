@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'model-page',
@@ -10,7 +10,11 @@ export class ModelPageComponent implements OnInit {
   @Input() squad: any;
   @Input() allTypes: any;
   @Input() king: string;
-  constructor(public modalCtrl: ModalController) {}
+
+  constructor(
+    public modalCtrl: ModalController,
+    public alertController: AlertController
+  ) {}
 
   ngOnInit() {}
 
@@ -19,9 +23,11 @@ export class ModelPageComponent implements OnInit {
       squad: this.squad,
       vampires: this.allTypes[0],
       wizards: this.allTypes[1],
-      vigilantes: this.allTypes[2],
-      draftsSquad: this.allTypes[3],
+      peasants: this.allTypes[2],
+      deaths: this.allTypes[3],
+      draftsSquad: this.allTypes[4],
       king: this.king,
+      serialKillers: this.allTypes[5],
     });
   }
 
@@ -33,5 +39,21 @@ export class ModelPageComponent implements OnInit {
     if (this.king === item) {
       this.king = undefined;
     }
+  }
+
+  kill(item: string) {
+    this.allTypes[3].push(item);
+    this.presentAlert(item + ' is dead now!');
+  }
+
+  async presentAlert(messagee: string) {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Alert!',
+      message: messagee,
+      buttons: ['OK'],
+    });
+
+    await alert.present();
   }
 }

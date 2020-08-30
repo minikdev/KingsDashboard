@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { AlertController, ModalController } from '@ionic/angular';
 import { ModelPageComponent } from '../model-page/model-page.component';
+import { CheatSheetComponent } from './cheat-sheet/cheat-sheet.component';
 
 @Component({
   selector: 'app-home',
@@ -12,12 +13,15 @@ export class HomePage implements OnInit {
   squad = [];
   draftsSquad = [];
   vampires = [];
+  serialKillers = [];
   wizards = [];
-  vigilantes = [];
+  deaths = [];
   king: string;
   oldKing: string;
   allTypes = [];
-
+  peasants = [];
+  jokerType = '';
+  peasantCount = 0;
   constructor(
     public alertController: AlertController,
     public modalController: ModalController
@@ -72,10 +76,29 @@ export class HomePage implements OnInit {
     if (this.isNotValid(randomEl)) {
       return;
     }
+
+    if (playerType === this.peasants && this.peasants.length === 2) {
+      this.pickJoker();
+    }
     playerType.push(this.draftsSquad[randomEl]);
     this.draftsSquad = this.draftsSquad.filter(
       (value) => value !== this.draftsSquad[randomEl]
     );
+    if (playerType === this.peasants) {
+      this.peasantCount++;
+    }
+  }
+
+  pickJoker() {
+    var randomEl = Math.floor(Math.random() * 2);
+
+    if (randomEl === 0) {
+      this.jokerType = 'Retributionist';
+    } else {
+      this.jokerType = 'Transporter';
+    }
+
+    this.presentAlert('Joker is ' + this.jokerType + ' for this game!');
   }
 
   drawKing() {
@@ -93,7 +116,7 @@ export class HomePage implements OnInit {
       return;
     }
     this.king = this.draftsSquad[randomEl];
-    console.log('Kral seçildi: ', this.king);
+
     this.draftsSquad = this.draftsSquad.filter((value) => value !== this.king);
   }
 
@@ -112,7 +135,10 @@ export class HomePage implements OnInit {
             this.draftsSquad = [];
             this.vampires = [];
             this.wizards = [];
-            this.vigilantes = [];
+            this.deaths = [];
+            this.serialKillers = [];
+
+            this.peasants = [];
             this.king = undefined;
             this.oldKing = undefined;
           },
@@ -122,7 +148,10 @@ export class HomePage implements OnInit {
           handler: () => {
             this.vampires = [];
             this.wizards = [];
-            this.vigilantes = [];
+
+            this.serialKillers = [];
+            this.deaths = [];
+            this.peasants = [];
             this.draftsSquad = this.squad;
             this.oldKing = this.king;
             this.king = undefined;
@@ -137,7 +166,7 @@ export class HomePage implements OnInit {
   async presentAlert(messagee: string) {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
-      header: 'Nope!',
+      header: 'Alert!',
       message: messagee,
       buttons: ['OK'],
     });
@@ -145,7 +174,7 @@ export class HomePage implements OnInit {
     await alert.present();
   }
 
-  async presentModal() {
+  async showSquadModal() {
     this.prepareAllTypesArray();
 
     const modal = await this.modalController.create({
@@ -165,21 +194,34 @@ export class HomePage implements OnInit {
   prepareAllTypesArray() {
     this.allTypes.push(this.vampires);
     this.allTypes.push(this.wizards);
-    this.allTypes.push(this.vigilantes);
+
+    this.allTypes.push(this.peasants);
+    this.allTypes.push(this.deaths);
     this.allTypes.push(this.draftsSquad);
+    this.allTypes.push(this.serialKillers);
   }
 
   takeData(data: any) {
     this.squad = data.squad;
     this.vampires = data.vampires;
     this.wizards = data.wizards;
-    this.vigilantes = data.vigilantes;
+    this.deaths = data.deaths;
     this.king = data.king;
     this.draftsSquad = data.draftsSquad;
+    this.serialKillers = data.serialKillers;
+
     this.allTypes = [];
   }
 
   isNotValid(randomEl: any): boolean {
     return this.draftsSquad[randomEl] === '' || !this.draftsSquad[randomEl];
+  }
+
+  async showCheatSheet() {
+    const modal = await this.modalController.create({
+      component: CheatSheetComponent,
+      cssClass: 'my-custom-class',
+    });
+    await modal.present();
   }
 }

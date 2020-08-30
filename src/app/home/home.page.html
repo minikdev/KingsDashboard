@@ -43,12 +43,22 @@
           </ion-label>
         </ion-col>
       </ion-row>
+      <ion-row class="Row">
+        <ion-col>
+          <ion-label color="dark" class="my-label"> Serial Killers: </ion-label>
+          <ion-label
+            color="dark"
+            class="my-label"
+            *ngFor="let item of serialKillers"
+          >
+            <ion-text>{{item}}, </ion-text>
+          </ion-label>
+        </ion-col>
+      </ion-row>
 
       <ion-row class="Row">
         <ion-col>
-          <ion-label color="warning" class="my-label">
-            Wizards:
-          </ion-label>
+          <ion-label color="warning" class="my-label"> Wizards: </ion-label>
 
           <ion-label
             color="warning"
@@ -62,14 +72,32 @@
 
       <ion-row class="Row">
         <ion-col>
-          <ion-label color="success" class="my-label">
-            Vigilantes:
-          </ion-label>
+          <ion-label color="success" class="my-label"> Peasants: </ion-label>
 
           <ion-label
             color="success"
             class="my-label"
-            *ngFor="let item of vigilantes"
+            *ngFor="let item of peasants"
+          >
+            <!-- <ion-icon slot="start" src="./assets/icon/musket.svg"></ion-icon>
+            <ion-icon
+              slot="start"
+              src="./assets/icon/binoculars.svg"
+            ></ion-icon>
+            <ion-icon slot="start" src="./assets/icon/joker.svg"></ion-icon> -->
+            <ion-text> {{item}}, </ion-text>
+          </ion-label>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="Row">
+        <ion-col>
+          <ion-label color="secondary" class="my-label"> Deaths: </ion-label>
+
+          <ion-label
+            color="secondary"
+            class="my-label"
+            *ngFor="let item of deaths"
           >
             <ion-text>{{item}}, </ion-text>
           </ion-label>
@@ -91,30 +119,42 @@
         <ion-icon slot="start" src="./assets/icon/vampire.svg"></ion-icon>
         +Vampire
       </ion-button>
+      <ion-button
+        expand="block"
+        color="dark"
+        (click)="drawPlayer(serialKillers)"
+      >
+        <ion-icon slot="start" src="./assets/icon/knife.svg"></ion-icon>
+        +Serial Killer
+      </ion-button>
       <ion-button expand="block" color="warning" (click)="drawPlayer(wizards)">
         <ion-icon slot="start" src="./assets/icon/wizard.svg"></ion-icon>
         +Wizard
       </ion-button>
-      <ion-button
-        expand="block"
-        color="success"
-        (click)="drawPlayer(vigilantes)"
-      >
-        <ion-icon slot="start" src="./assets/icon/musket.svg"></ion-icon>
-        +Vigilante</ion-button
-      >
+      <ion-button expand="block" color="success" (click)="drawPlayer(peasants)">
+        <ion-icon slot="start" src="./assets/icon/farmer.svg"></ion-icon>
+        +Peasant
+      </ion-button>
 
       <!-- Round -->
-      <ion-row>
+      <ion-row class="ion-text-center">
         <ion-col>
           <ion-button shape="round" (click)="restartGame()">
             <ion-icon name="refresh-outline"></ion-icon>
             Restart</ion-button
           > </ion-col
         ><ion-col>
-          <ion-button shape="round" (click)="presentModal()">
-            <ion-icon src="./assets/icon/waving-hand.svg"> </ion-icon>
-            Kick From Squad</ion-button
+          <ion-button shape="round" (click)="showSquadModal()">
+            <ion-icon slot="start" src="./assets/icon/group.svg"> </ion-icon>
+            Squad List</ion-button
+          >
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-no-margin ion-text-center">
+        <ion-col>
+          <ion-button shape="round" (click)="showCheatSheet()">
+            <ion-icon slot="start" src="./assets/icon/book.svg"> </ion-icon>
+            Touch List</ion-button
           >
         </ion-col>
       </ion-row>

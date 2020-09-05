@@ -26,6 +26,7 @@
         <ion-col size="12" offset="0">
           <ion-label color="medium" class="my-label"> King: </ion-label>
           <ion-label color="medium" class="my-label">
+            <ion-icon src="./assets/icon/crown.svg" *ngIf="king"></ion-icon>
             <ion-text>{{king}} </ion-text>
           </ion-label>
         </ion-col>
@@ -39,18 +40,7 @@
             class="my-label"
             *ngFor="let item of vampires"
           >
-            <ion-text>{{item}}, </ion-text>
-          </ion-label>
-        </ion-col>
-      </ion-row>
-      <ion-row class="Row">
-        <ion-col>
-          <ion-label color="dark" class="my-label"> Serial Killers: </ion-label>
-          <ion-label
-            color="dark"
-            class="my-label"
-            *ngFor="let item of serialKillers"
-          >
+            <ion-icon src="/assets/icon/vampire.svg"></ion-icon>
             <ion-text>{{item}}, </ion-text>
           </ion-label>
         </ion-col>
@@ -58,14 +48,18 @@
 
       <ion-row class="Row">
         <ion-col>
-          <ion-label color="warning" class="my-label"> Wizards: </ion-label>
+          <ion-label color="warning" class="my-label"> Neutrals: </ion-label>
 
           <ion-label
-            color="warning"
             class="my-label"
-            *ngFor="let item of wizards"
+            *ngFor="let item of neutrals; let i = index"
           >
-            <ion-text>{{item}}, </ion-text>
+            <ion-icon
+              slot="start"
+              [src]="neutralIcons[i]"
+              *ngIf="neutralIcons[i]"
+            ></ion-icon>
+            <ion-text color="warning">{{item}}, </ion-text>
           </ion-label>
         </ion-col>
       </ion-row>
@@ -75,31 +69,16 @@
           <ion-label color="success" class="my-label"> Peasants: </ion-label>
 
           <ion-label
-            color="success"
             class="my-label"
-            *ngFor="let item of peasants"
+            *ngFor="let item of peasants; let i = index"
           >
-            <!-- <ion-icon slot="start" src="./assets/icon/musket.svg"></ion-icon>
             <ion-icon
               slot="start"
-              src="./assets/icon/binoculars.svg"
+              [src]="peasantIcons[i]"
+              *ngIf="peasantIcons[i]"
             ></ion-icon>
-            <ion-icon slot="start" src="./assets/icon/joker.svg"></ion-icon> -->
-            <ion-text> {{item}}, </ion-text>
-          </ion-label>
-        </ion-col>
-      </ion-row>
 
-      <ion-row class="Row">
-        <ion-col>
-          <ion-label color="secondary" class="my-label"> Deaths: </ion-label>
-
-          <ion-label
-            color="secondary"
-            class="my-label"
-            *ngFor="let item of deaths"
-          >
-            <ion-text>{{item}}, </ion-text>
+            <ion-text color="success"> {{item}}, </ion-text>
           </ion-label>
         </ion-col>
       </ion-row>
@@ -119,17 +98,10 @@
         <ion-icon slot="start" src="./assets/icon/vampire.svg"></ion-icon>
         +Vampire
       </ion-button>
-      <ion-button
-        expand="block"
-        color="dark"
-        (click)="drawPlayer(serialKillers)"
-      >
-        <ion-icon slot="start" src="./assets/icon/knife.svg"></ion-icon>
-        +Serial Killer
-      </ion-button>
-      <ion-button expand="block" color="warning" (click)="drawPlayer(wizards)">
+
+      <ion-button expand="block" color="warning" (click)="drawPlayer(neutrals)">
         <ion-icon slot="start" src="./assets/icon/wizard.svg"></ion-icon>
-        +Wizard
+        +Neutral
       </ion-button>
       <ion-button expand="block" color="success" (click)="drawPlayer(peasants)">
         <ion-icon slot="start" src="./assets/icon/farmer.svg"></ion-icon>

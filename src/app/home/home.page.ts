@@ -3,7 +3,16 @@ import { Component, OnInit } from '@angular/core';
 import { AlertController, ModalController } from '@ionic/angular';
 import { ModelPageComponent } from '../model-page/model-page.component';
 import { CheatSheetComponent } from './cheat-sheet/cheat-sheet.component';
-
+const peasantIcons = [
+  './assets/icon/musket.svg',
+  './assets/icon/mover-truck.svg',
+  './assets/icon/binoculars.svg',
+];
+const neutralIcons = [
+  './assets/icon/wizard.svg',
+  './assets/icon/joker.svg',
+  './assets/icon/knife.svg',
+];
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -14,18 +23,23 @@ export class HomePage implements OnInit {
   draftsSquad = [];
   vampires = [];
   serialKillers = [];
-  wizards = [];
+  neutrals = [];
   deaths = [];
   king: string;
   oldKing: string;
   allTypes = [];
   peasants = [];
-  jokerType = '';
+
   peasantCount = 0;
+  peasantIcons;
+  neutralIcons;
   constructor(
     public alertController: AlertController,
     public modalController: ModalController
-  ) {}
+  ) {
+    this.peasantIcons = peasantIcons;
+    this.neutralIcons = neutralIcons;
+  }
 
   ngOnInit(): void {}
 
@@ -69,17 +83,42 @@ export class HomePage implements OnInit {
     }
     return true;
   }
+  drawKing() {
+    var randomEl = Math.floor(Math.random() * this.draftsSquad.length);
+
+    if (this.isNotValidKing(randomEl)) {
+      return;
+    }
+
+    if (this.oldKingIsKingAgain(randomEl)) {
+      this.drawKing();
+      return;
+    }
+
+    this.king = this.draftsSquad[randomEl];
+    this.draftsSquad = this.draftsSquad.filter((value) => value !== this.king);
+  }
+
+  isNotValidKing(randomEl: any): boolean {
+    return (
+      this.draftsSquad[randomEl] === '' ||
+      !this.draftsSquad[randomEl] ||
+      this.king !== undefined ||
+      (this.oldKing && this.draftsSquad.length <= 1)
+    );
+  }
+
+  oldKingIsKingAgain(randomEl: number) {
+    return this.draftsSquad[randomEl] === this.oldKing;
+  }
 
   drawPlayer(playerType: string[]) {
     var randomEl = Math.floor(Math.random() * this.draftsSquad.length);
 
-    if (this.isNotValid(randomEl)) {
+    if (this.isNotValidPlayer(randomEl)) {
       return;
     }
 
-    if (playerType === this.peasants && this.peasants.length === 2) {
-      this.pickJoker();
-    }
     playerType.push(this.draftsSquad[randomEl]);
     this.draftsSquad = this.draftsSquad.filter(
       (value) => value !== this.draftsSquad[randomEl]
@@ -89,35 +128,8 @@ export class HomePage implements OnInit {
     }
   }
 
-  pickJoker() {
-    var randomEl = Math.floor(Math.random() * 2);
-
-    if (randomEl === 0) {
-      this.jokerType = 'Retributionist';
-    } else {
-      this.jokerType = 'Transporter';
-    }
-
-    this.presentAlert('Joker is ' + this.jokerType + ' for this game!');
-  }
-
-  drawKing() {
-    if (this.king) {
-      return;
-    }
-    var randomEl = Math.floor(Math.random() * this.draftsSquad.length);
-
-    if (this.isNotValid(randomEl)) {
-      return;
-    }
-
-    if (this.draftsSquad[randomEl] === this.oldKing) {
-      this.drawKing();
-      return;
-    }
-    this.king = this.draftsSquad[randomEl];
-
-    this.draftsSquad = this.draftsSquad.filter((value) => value !== this.king);
+  isNotValidPlayer(randomEl: any): boolean {
+    return this.draftsSquad[randomEl] === '' || !this.draftsSquad[randomEl];
   }
 
   async restartGame() {
@@ -134,7 +146,7 @@ export class HomePage implements OnInit {
             this.squad = [];
             this.draftsSquad = [];
             this.vampires = [];
-            this.wizards = [];
+            this.neutrals = [];
             this.deaths = [];
             this.serialKillers = [];
 
@@ -147,7 +159,7 @@ export class HomePage implements OnInit {
           text: 'Yes',
           handler: () => {
             this.vampires = [];
-            this.wizards = [];
+            this.neutrals = [];
 
             this.serialKillers = [];
             this.deaths = [];
@@ -158,17 +170,6 @@ export class HomePage implements OnInit {
           },
         },
       ],
-    });
-
-    await alert.present();
-  }
-
-  async presentAlert(messagee: string) {
-    const alert = await this.alertController.create({
-      cssClass: 'my-custom-class',
-      header: 'Alert!',
-      message: messagee,
-      buttons: ['OK'],
     });
 
     await alert.present();
@@ -192,29 +193,24 @@ export class HomePage implements OnInit {
   }
 
   prepareAllTypesArray() {
-    this.allTypes.push(this.vampires);
-    this.allTypes.push(this.wizards);
+    this.allTypes.push(this.vampires); // 0
+    this.allTypes.push(this.neutrals); // 1
 
-    this.allTypes.push(this.peasants);
-    this.allTypes.push(this.deaths);
-    this.allTypes.push(this.draftsSquad);
-    this.allTypes.push(this.serialKillers);
+    this.allTypes.push(this.peasants); // 2
+    this.allTypes.push(this.deaths); // 3
+    this.allTypes.push(this.draftsSquad); // 4
   }
 
   takeData(data: any) {
     this.squad = data.squad;
     this.vampires = data.vampires;
-    this.wizards = data.wizards;
+    this.neutrals = data.neutrals;
+    this.peasants = data.peasants;
     this.deaths = data.deaths;
     this.king = data.king;
     this.draftsSquad = data.draftsSquad;
-    this.serialKillers = data.serialKillers;
 
     this.allTypes = [];
-  }
-
-  isNotValid(randomEl: any): boolean {
-    return this.draftsSquad[randomEl] === '' || !this.draftsSquad[randomEl];
   }
 
   async showCheatSheet() {
@@ -223,5 +219,16 @@ export class HomePage implements OnInit {
       cssClass: 'my-custom-class',
     });
     await modal.present();
+  }
+
+  async presentAlert(messagee: string) {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Alert!',
+      message: messagee,
+      buttons: ['OK'],
+    });
+
+    await alert.present();
   }
 }
